@@ -82,7 +82,7 @@ EXAMPLES = r'''
 
 RETURN = r'''
 ---
-environments:
+services:
   description: The information about the named DataFlow Service or DataFlow Services
   type: list
   returned: always

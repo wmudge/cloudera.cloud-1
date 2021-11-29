@@ -53,11 +53,10 @@ EXAMPLES = r'''
 '''
 
 RETURN = r'''
-environments: 
-  description: The information about the named Environment or Environments
+freeipa: 
+  description: The information about the FreeIPA instance(s) of the named Environment
   type: dict
-  returned: on success
-  elements: complex
+  returned: always
   contains:
     environmentCrn:
       description: CDP CRN value for the Environment.
@@ -125,7 +124,7 @@ def main():
     )
 
     result = FreeIPAInfo(module)
-    output = dict(changed=False, environments=result.freeipa)
+    output = dict(changed=False, freeipa=result.freeipa)
 
     if result.debug:
         output.update(sdk_out=result.log_out, sdk_out_lines=result.log_lines)

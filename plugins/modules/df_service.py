@@ -147,11 +147,10 @@ EXAMPLES = r'''
 
 RETURN = r'''
 ---
-environments:
-  description: The information about the named DataFlow Service or DataFlow Services
-  type: list
+service:
+  description: The information about the named DataFlow Service
+  type: dict
   returned: always
-  elements: complex
   contains:
     crn:
       description:  The DataFlow Service's parent environment CRN.
