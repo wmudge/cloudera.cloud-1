@@ -10,7 +10,7 @@ on:
     inputs:
     
 jobs:
-  test:
+  build:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -51,6 +51,14 @@ jobs:
           tags: ${{ steps.meta.outputs.tags }}
           username: ${{ github.actor }}
           password: ${{ secrets.GITHUB_TOKEN }}
+
+  test:
+    needs: build
+    runs-on: ubuntu-latest
+    container: ${{ needs.build.steps.push-image.output.registry-path }}
+    steps: 
+      - run: ansible --version
+      - run: ansible-galaxy collection list
 
   # Remove/reset label if invoked by the appropriate 'labeled' event
   remove-label:
