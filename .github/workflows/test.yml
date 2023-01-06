@@ -17,7 +17,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       - run: ansible --version
-      - run: ansible-galaxy collection list
       - run: ansible-galaxy collection install -r requirements.yml
       - run: ansible-galaxy collection list
       - run: ansible-builder introspect --sanitize
