@@ -1,5 +1,5 @@
 ---
 
 collections:
-  - source: ./
+  - source: .
     type: dir
