@@ -16,10 +16,13 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      - run: pip install ansible-builder==1.2.0
       - run: ansible --version
       - run: ansible-galaxy collection install -r requirements.yml
       - run: ansible-galaxy collection list
-      - run: ansible-builder introspect --sanitize
+      - run: ansible-builder introspect --sanitize --user-pip=requirements.txt --user-bindep=bindep.txt --write-bindep=/tmp/src/bindep.txt --write-pip=/tmp/src/requirements.txt
+      - run: echo $(cat /tmp/src/bindep.txt)
+      - run: echo $(cat /tmp/src/requirements.txt)
 
   # Remove/reset label if invoked by the appropriate 'labeled' event
   remove-label:
