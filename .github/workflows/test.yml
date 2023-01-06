@@ -10,11 +10,17 @@ on:
     inputs:
     
 jobs:
-  build:
-    if: github.event.label.name == 'test' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
-    uses: wmudge/cldr-runner/.github/workflows/build_and_push_image.yml@feature/builder-ex-env
-    with:
-      EE_CONTEXT_FOLDER: ./
+  test:
+    runs-on: ubuntu-latest
+    container: quay.io/ansible/ansible-runner:stable-2.12-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+      - run: ansible --version
+      - run: ansible-galaxy collection list
+      - run: ansible-galaxy collection install -r requirements.yml
+      - run: ansible-galaxy collection list
+      - run: ansible-builder introspect --sanitize
 
   # Remove/reset label if invoked by the appropriate 'labeled' event
   remove-label:
@@ -25,11 +31,3 @@ jobs:
         with:
           labels: |
             test
-
-  test:
-    needs: build
-    runs-on: ubuntu-latest
-    container: ${{ needs.build.outputs.image-sha }}
-    steps:
-      - run: ansible --version >> $GITHUB_OUTPUT
-      - run: ansible-galaxy collection list >> $GITHUB_OUTPUT
