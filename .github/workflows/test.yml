@@ -12,6 +12,9 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    outputs:
+      image-sha: ghcr.io/${{ github.repository }}:${{ steps.sha.outputs.sha-short }}
+      image-paths: ${{ steps.push-image.outputs.registry-paths }}
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
@@ -55,7 +58,7 @@ jobs:
   test:
     needs: build
     runs-on: ubuntu-latest
-    container: ${{ needs.build.steps.push-image.output.registry-path }}
+    container: ${{ needs.build.outputs.image-sha }}
     steps: 
       - run: ansible --version
       - run: ansible-galaxy collection list
