@@ -10,7 +10,7 @@ on:
     
 jobs:
   build:
-    if: github.event.label.name == 'test' || github.event_name == 'workflow_dispatch'
+    if: github.event.label.name == 'test' || github.event_name == 'workflow_dispatch' || github.event_name == 'push'
     uses: wmudge/cldr-runner/.github/workflows/build_and_push_image.yml@feature/builder-ex-env
     with:
       EE_CONTEXT_FOLDER: ./
