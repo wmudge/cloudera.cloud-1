@@ -12,18 +12,9 @@ on:
 jobs:
   test:
     runs-on: ubuntu-latest
-    container: quay.io/ansible/ansible-runner:stable-2.12-latest
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      - run: apt-get -y install buildah
-      - run: pip install ansible-builder==1.2.0
-      - run: ansible --version
-      - run: ansible-galaxy collection install -r requirements.yml
-      - run: ansible-galaxy collection list
-      - run: ansible-builder introspect --sanitize --user-pip=requirements.txt --user-bindep=bindep.txt --write-bindep=/tmp/src/bindep.txt --write-pip=/tmp/src/requirements.txt
-      - run: echo $(cat /tmp/src/bindep.txt)
-      - run: echo $(cat /tmp/src/requirements.txt)
 
       - name: Construct image metadata
         id: meta
