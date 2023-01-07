@@ -45,7 +45,7 @@ jobs:
         run: |
           ansible-builder create --context=.
           ls -la
-          sed 's/_build/./g' Containerfile
+          sed -i 's/_build/./g' Containerfile
           echo $(cat Containerfile)
 
       - name: Build image
