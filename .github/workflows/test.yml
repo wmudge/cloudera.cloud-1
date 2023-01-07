@@ -19,6 +19,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      - name: Install ansible-builder
+        run: pip install ansible-builder==1.2.0
+
       - name: Construct image metadata
         id: meta
         uses: docker/metadata-action@v4
