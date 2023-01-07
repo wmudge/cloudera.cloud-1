@@ -44,8 +44,9 @@ jobs:
         # This uses the working directory as the context folder itself
         run: |
           ansible-builder create --context=.
-          sed 's/_build/./g' ContainerFile
-          echo $(cat ContainerFile)
+          ls -la
+          sed 's/_build/./g' Containerfile
+          echo $(cat Containerfile)
 
       - name: Build image
         id: build-image
