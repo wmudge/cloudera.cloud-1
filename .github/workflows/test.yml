@@ -36,6 +36,14 @@ jobs:
         id: sha
         run: echo "sha-short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
 
+      - name: Create image context
+        working-directory: .
+        # This uses the working directory as the context folder itself
+        run: |
+          ansible-builder create --context=.
+          sed 's/_build/./g' ContainerFile
+          echo $(cat ContainerFile)
+
       - name: Build image
         id: build-image
         uses: redhat-actions/buildah-build@v2
