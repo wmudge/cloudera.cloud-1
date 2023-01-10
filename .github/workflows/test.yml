@@ -4,68 +4,18 @@ name: Test
 
 on:
   push:
+    branches: [devel]
   pull_request:
     types: [labeled]
   workflow_dispatch:
-    inputs:
     
 jobs:
   build:
-    runs-on: ubuntu-latest
-    outputs:
-      image-sha: ghcr.io/${{ github.repository }}:sha-${{ steps.sha.outputs.sha-short }}
-      image-paths: ${{ steps.push-image.outputs.registry-paths }}
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v3
-
-      - name: Install ansible-builder
-        run: pip install ansible-builder==1.2.0
-
-      - name: Construct image metadata
-        id: meta
-        uses: docker/metadata-action@v4
-        with:
-          images: |
-            ghcr.io/${{ github.repository }}
-          tags: |
-            type=sha
-            type=ref,event=branch
-            type=ref,event=pr
-            type=semver,pattern={{version}}
-            type=semver,pattern={{major}}.{{minor}}
-
-      - name: Construct short SHA
-        id: sha
-        run: echo "sha-short=$(git rev-parse --short HEAD)" >> $GITHUB_OUTPUT
-
-      - name: Create image context
-        working-directory: .
-        # This uses the working directory as the context folder itself
-        run: |
-          ansible-builder create --context=.
-          ls -la
-          sed -i 's/_build/./g' Containerfile
-          echo $(cat Containerfile)
-
-      - name: Build image
-        id: build-image
-        uses: redhat-actions/buildah-build@v2
-        with:
-          context: .
-          image: ${{ github.repository }}
-          tags: ${{ steps.meta.outputs.tags }}
-          labels: ${{ steps.meta.outputs.labels }}
-          containerfiles: |
-            ./Containerfile
-
-      - name: Push image
-        id: push-image
-        uses: redhat-actions/push-to-registry@v2
-        with:
-          tags: ${{ steps.meta.outputs.tags }}
-          username: ${{ github.actor }}
-          password: ${{ secrets.GITHUB_TOKEN }}
+    if: github.event.label.name == 'test' || github.event_name == 'workflow_dispatch'
+    uses: wmudge/cldr-runner/.github/workflows/build_and_push_image.yml@feature/builder-ex-env
+    with:
+      EE_CONTEXT_FOLDER: ./builder
+      EE_MOUNT_FOLDER: .
 
   test:
     needs: build
