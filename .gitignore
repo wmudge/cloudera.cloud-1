@@ -24,6 +24,9 @@ tests/integration/integration_config.yml
 # Remove the Sphinx build directory
 site/_build
 
+# Remove the ContainerFile for the testing Execution Environment
+builder/ContainerFile
+
 ### Python template
 # Byte-compiled / optimized / DLL files
 __pycache__/
