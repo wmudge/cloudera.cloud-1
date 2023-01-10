@@ -16,7 +16,7 @@ jobs:
     with:
       EE_CONTEXT_FOLDER: ./builder
       EE_CONFIG_FILE: ./builder/execution-environment.yml
-      EE_MOUNT_FOLDER: ./
+      EE_MOUNT_FOLDER: .
 
   test:
     needs: build
