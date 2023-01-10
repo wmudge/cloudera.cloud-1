@@ -15,6 +15,7 @@ jobs:
     uses: wmudge/cldr-runner/.github/workflows/build_and_push_image.yml@feature/builder-ex-env
     with:
       EE_CONTEXT_FOLDER: ./builder
+      EE_CONFIG_FILE: ./builder/execution-environment.yml
       EE_MOUNT_FOLDER: ./
 
   test:
