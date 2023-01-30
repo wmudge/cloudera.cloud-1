@@ -10,9 +10,12 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+        
       - run: |
-          apt -y update
-          apt -y install python3 python3-pip
+          apt-get -y update
+          apt-get -y install python3 python3-pip
           update-alternatives --install /usr/bin/python python $(which python3) 1
           pip install ansible-core==2.12 ansible-builder 
           ansible-galaxy collection install -r builder/requirements.yml
