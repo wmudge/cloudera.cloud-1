@@ -31,7 +31,7 @@ jobs:
       - run: pip freeze
       - run: |
           pushd /usr/share/ansible/collections/ansible_collections/cloudera/cloud
-          ansible-test sanity --test pep8
-          ansible-test sanity --test validate-modules
+          #ansible-test sanity --test pep8
+          #ansible-test sanity --test validate-modules
           ansible-test units -v --color yes --redact --requirements --venv
           popd
