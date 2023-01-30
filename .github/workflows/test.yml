@@ -1,37 +1,26 @@
 ---
 
-name: Test
+name: Preliminary tests
 
 on:
-  push:
-    branches: [devel]
   pull_request:
-    types: [labeled]
   workflow_dispatch:
     
 jobs:
-  build:
-    if: github.event.label.name == 'test' || github.event_name == 'workflow_dispatch'
-    uses: wmudge/cldr-runner/.github/workflows/build_and_push_image.yml@feature/builder-ex-env
-    with:
-      EE_CONTEXT_FOLDER: ./builder
-      EE_CONFIG_FILE: ./builder/execution-environment.yml
-      EE_MOUNT_FOLDER: .
-
   test:
-    needs: build
-    runs-on: ubuntu-latest
-    container: ${{ needs.build.outputs.image-sha }}
-    steps: 
-      - run: ansible --version
-      - run: ansible-galaxy collection list
-
-  # Remove/reset label if invoked by the appropriate 'labeled' event
-  remove-label:
-    if: github.event.label.name == 'test'
     runs-on: ubuntu-latest
     steps:
-      - uses: actions-ecosystem/action-remove-labels@v1
-        with:
-          labels: |
-            test
+      - run: |
+          apt -y update
+          apt -y install python3 python3-pip
+          update-alternatives --install /usr/bin/python python $(which python3) 1
+          pip install ansible-core==2.12 ansible-builder 
+          ansible-galaxy collection install -r builder/requirements.yml
+
+      - run: ansible --version
+      - run: ansible-galaxy collection list
+      - run: |
+          ansible-builder introspect --write-pip final_python.txt --write-bindep final_bindep.txt
+          pip install -r final_python.txt
+          apt -y install $(cat final_bindep.txt)
+      - run: pip freeze
