@@ -29,4 +29,7 @@ jobs:
           pip install -r final_python.txt
           sudo apt-get -y install $(cat final_bindep.txt)
       - run: pip freeze
-      - run: ansible-test units -v --color yes --redact --requirements --local
+      - run: |
+          pushd /usr/share/ansible/collections/ansible_collections/cloudera/cloud
+          ansible-test units -v --color yes --redact --requirements --local
+          popd
