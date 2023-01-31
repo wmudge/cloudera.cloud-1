@@ -1,0 +1,35 @@
+---
+
+name: Label validated Pull Request
+
+on:
+  workflow_run:
+    workflows: ["Validate Pull Request"]
+    types:
+      - completed
+
+jobs:
+  label:
+    permissions:
+      contents: read
+      pull-requests: write
+    runs-on: ubuntu-latest
+    if: >
+      github.event.workflow_run.event == 'pull_request' &&
+      github.event.workflow_run.conclusion == 'success'
+    steps:
+      - name: Download PR number artifact
+        uses: actions/download-artifact@v3
+        id: download
+        with:
+          name: pr_number
+
+      - name: Read the PR number
+        id: read
+        run: echo "pr_number=$(cat ${{ steps.download.outputs.download-path }})" >> $GITHUB_OUTPUT
+
+      - name: Label the PR
+        uses: actions-ecosystem/action-add-labels@v1
+        with:
+          labels: validated
+          number: ${{ steps.read.outputs.pr_number }}
