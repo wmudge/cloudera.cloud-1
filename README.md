@@ -1,7 +1,5 @@
 # cloudera.cloud - Cloudera Data Platform (CDP) for Public and Private Cloud
 
-Readme last updated: 2022-01-31
-
 # Quickstart
 
 1. [Install the collection](#installation)
