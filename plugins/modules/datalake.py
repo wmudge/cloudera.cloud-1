@@ -63,7 +63,7 @@ options:
       - If the environment is AWS-based, I(instance_profile) and I(storage) must be present.
     type: str
     required: False
-    choices:
+    aliases:
       - env
   instance_profile:
     description:
